@@ -1,0 +1,30 @@
+name: Atualizar Médias IBOV
+
+on:
+  schedule:
+    # Seg a sex às 22:10 UTC (19:10 BRT) — após o workflow principal
+    - cron: "10 22 * * 1-5"
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  update:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+      - name: Instalar dependências
+        run: pip install yfinance numpy pandas
+      - name: Rodar script
+        run: python update_medias.py
+      - name: Commit dados
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add docs/medias.json
+          git diff --cached --quiet || git commit -m "médias: IBOV $(date -u +%Y-%m-%d)"
+          git push
