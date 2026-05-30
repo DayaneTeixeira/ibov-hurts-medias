@@ -1,0 +1,238 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>WIN · Alinhamento de Médias</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --bg:#f5f6f8;--card:#fff;--border:#e2e5ea;--text:#1a1d23;--muted:#6b7280;--surface:#f9fafb;
+  --green:#166534;--green-bg:#dcfce7;--green-border:#86efac;
+  --lime:#3f6212;--lime-bg:#ecfccb;--lime-border:#bef264;
+  --red:#991b1b;--red-bg:#fee2e2;--red-border:#fca5a5;
+  --amber:#92400e;--amber-bg:#fef3c7;--amber-border:#fcd34d;
+  --blue:#1e40af;--blue-bg:#dbeafe;--blue-border:#93c5fd;
+}
+@media(prefers-color-scheme:dark){
+  :root{
+    --bg:#0f1117;--card:#181c25;--border:#252b36;--text:#e8ecf0;--muted:#6b7280;--surface:#13171f;
+    --green:#86efac;--green-bg:#14532d;--green-border:#166534;
+    --lime:#bef264;--lime-bg:#1a2e05;--lime-border:#3f6212;
+    --red:#fca5a5;--red-bg:#450a0a;--red-border:#991b1b;
+    --amber:#fcd34d;--amber-bg:#451a03;--amber-border:#92400e;
+    --blue:#93c5fd;--blue-bg:#1e3a5f;--blue-border:#1e40af;
+  }
+}
+body{background:var(--bg);color:var(--text);font-family:'Inter',sans-serif;font-size:13px;min-height:100vh}
+.wrap{max-width:1300px;margin:0 auto;padding:20px 16px}
+.header{display:flex;justify-content:space-between;align-items:flex-start;flex-wrap:wrap;gap:10px;margin-bottom:18px}
+.header h1{font-size:16px;font-weight:600}
+.header p{font-size:11px;color:var(--muted);margin-top:2px}
+.badge{display:flex;align-items:center;gap:5px;font-size:11px;color:var(--muted);background:var(--card);border:0.5px solid var(--border);padding:4px 12px;border-radius:20px;white-space:nowrap}
+.dot{width:6px;height:6px;border-radius:50%;background:#22c55e;animation:pulse 2s infinite}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:.3}}
+
+/* NAV entre páginas */
+.nav{display:flex;gap:8px;margin-bottom:16px}
+.nav a{font-size:12px;padding:5px 14px;border-radius:6px;border:0.5px solid var(--border);color:var(--muted);text-decoration:none;background:var(--card)}
+.nav a.active{background:var(--text);color:var(--bg);border-color:var(--text)}
+
+/* RESUMO GERAL */
+.resumo{display:grid;grid-template-columns:repeat(5,1fr);gap:10px;margin-bottom:16px}
+@media(max-width:700px){.resumo{grid-template-columns:repeat(2,1fr)}}
+.res-card{background:var(--card);border:0.5px solid var(--border);border-radius:10px;padding:12px 14px;border-top:2px solid var(--border)}
+.res-tf{font-size:10px;letter-spacing:1px;text-transform:uppercase;color:var(--muted);font-weight:500}
+.res-preco{font-size:11px;color:var(--muted);margin-top:2px}
+.res-sinal{font-size:13px;font-weight:600;margin-top:6px}
+.res-pct{margin-top:6px}
+.pct-bar{height:6px;border-radius:3px;background:var(--border);overflow:hidden;margin-top:3px}
+.pct-fill{height:100%;border-radius:3px;transition:width .5s}
+.pct-label{display:flex;justify-content:space-between;font-size:10px;color:var(--muted);margin-top:2px}
+
+/* TABELA DETALHADA */
+.tf-section{margin-bottom:16px}
+.tf-header{display:flex;align-items:center;gap:12px;margin-bottom:8px;flex-wrap:wrap}
+.tf-title{font-size:14px;font-weight:600}
+.tf-preco{font-size:12px;color:var(--muted)}
+.sinal-pill{display:inline-block;padding:3px 12px;border-radius:5px;font-size:11px;font-weight:600;border:0.5px solid}
+
+.grid-medias{display:grid;grid-template-columns:repeat(4,1fr);gap:8px}
+@media(max-width:600px){.grid-medias{grid-template-columns:repeat(2,1fr)}}
+
+.tipo-card{background:var(--card);border:0.5px solid var(--border);border-radius:8px;overflow:hidden}
+.tipo-header{padding:8px 12px;font-size:10px;font-weight:600;letter-spacing:1px;text-transform:uppercase;background:var(--surface);border-bottom:0.5px solid var(--border);display:flex;justify-content:space-between;align-items:center}
+.align-badge{font-size:9px;padding:1px 6px;border-radius:3px;font-weight:500}
+.bull{background:var(--green-bg);color:var(--green);border:0.5px solid var(--green-border)}
+.bear{background:var(--red-bg);color:var(--red);border:0.5px solid var(--red-border)}
+.misto{background:var(--amber-bg);color:var(--amber);border:0.5px solid var(--amber-border)}
+
+.media-row{display:flex;justify-content:space-between;align-items:center;padding:6px 12px;border-bottom:0.5px solid var(--border)}
+.media-row:last-child{border-bottom:none}
+.media-periodo{font-size:11px;color:var(--muted);width:36px}
+.media-valor{font-size:12px;font-weight:500;font-variant-numeric:tabular-nums}
+.media-vs{font-size:10px;font-weight:600;padding:1px 7px;border-radius:3px;border:0.5px solid}
+.vs-acima{background:var(--green-bg);color:var(--green);border-color:var(--green-border)}
+.vs-abaixo{background:var(--red-bg);color:var(--red);border-color:var(--red-border)}
+.vs-nd{background:var(--surface);color:var(--muted);border-color:var(--border)}
+
+/* alinhamento entre as 4 médias do mesmo período */
+.periodo-alinha{display:flex;gap:4px;margin:8px 12px;padding:6px 10px;background:var(--surface);border-radius:6px;font-size:10px;flex-wrap:wrap}
+.pa-label{color:var(--muted);margin-right:4px}
+
+#loading{text-align:center;padding:60px 0;color:var(--muted)}
+#error{text-align:center;padding:60px 0;color:var(--red)}
+.spin{display:inline-block;width:20px;height:20px;border:2px solid var(--border);border-top-color:#3b82f6;border-radius:50%;animation:spin .8s linear infinite;margin-bottom:8px}
+@keyframes spin{to{transform:rotate(360deg)}}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="header">
+    <div>
+      <h1>WIN · Alinhamento de Médias</h1>
+      <p>EMA · SMA · WMA · RMA (Wilder) · Períodos 9, 50, 200</p>
+    </div>
+    <div class="badge"><span class="dot"></span><span id="updated">carregando...</span></div>
+  </div>
+
+  <div class="nav">
+    <a href="index.html">Hurst · Comparativo</a>
+    <a href="medias.html" class="active">Alinhamento de Médias</a>
+  </div>
+
+  <div id="loading"><div class="spin"></div><br>Calculando médias...</div>
+  <div id="error" style="display:none"></div>
+  <div id="app" style="display:none"></div>
+</div>
+
+<script>
+const TFS = ["240min","60min","30min","15min","5min"];
+const TF_LABEL = {"240min":"240 min","60min":"60 min","30min":"30 min","15min":"15 min","5min":"5 min"};
+const TIPOS = ["EMA","SMA","WMA","RMA"];
+const PERIODOS = [9,50,200];
+
+function cor(sinal_cor){
+  return {green:"var(--green)",lime:"var(--lime)",amber:"var(--amber)",red:"var(--red)",darkred:"var(--red)"}[sinal_cor]||"var(--muted)";
+}
+function bgCor(sinal_cor){
+  return {green:"var(--green-bg)",lime:"var(--lime-bg)",amber:"var(--amber-bg)",red:"var(--red-bg)",darkred:"var(--red-bg)"}[sinal_cor]||"var(--surface)";
+}
+function bordCor(sinal_cor){
+  return {green:"var(--green-border)",lime:"var(--lime-border)",amber:"var(--amber-border)",red:"var(--red-border)",darkred:"var(--red-border)"}[sinal_cor]||"var(--border)";
+}
+function fmtNum(v){ return v!=null?Number(v).toLocaleString("pt-BR",{minimumFractionDigits:0,maximumFractionDigits:0}):"—" }
+
+function buildResumo(data){
+  return TFS.map(tf=>{
+    const d = data.timeframes[tf];
+    if(!d||d.erro) return `<div class="res-card"><div class="res-tf">${TF_LABEL[tf]}</div><div style="color:var(--muted);font-size:11px;margin-top:8px">Sem dados</div></div>`;
+    const pctC = d.pct_comprador;
+    const pctV = d.pct_vendedor;
+    const c = cor(d.sinal_cor), bg = bgCor(d.sinal_cor), bd = bordCor(d.sinal_cor);
+    return `<div class="res-card" style="border-top-color:${c}">
+      <div class="res-tf">${TF_LABEL[tf]}</div>
+      <div class="res-preco">${fmtNum(d.preco)} pts</div>
+      <div class="res-sinal" style="color:${c}">${d.sinal}</div>
+      <div class="res-pct">
+        <div class="pct-bar">
+          <div class="pct-fill" style="width:${pctC}%;background:${c}"></div>
+        </div>
+        <div class="pct-label">
+          <span style="color:var(--green)">▲ ${pctC}%</span>
+          <span style="color:var(--red)">▼ ${pctV}%</span>
+        </div>
+      </div>
+    </div>`;
+  }).join("");
+}
+
+function buildTipoCard(tipo, medias, alinhamento, preco){
+  const alin = alinhamento[tipo];
+  const alinClass = alin==="bull"?"bull":alin==="bear"?"bear":"misto";
+  const alinLabel = alin==="bull"?"↑ Bull":alin==="bear"?"↓ Bear":"↔ Misto";
+
+  const rows = PERIODOS.map(p=>{
+    const val = medias[p]?.[tipo];
+    const vs  = val!=null?(preco>val?"acima":"abaixo"):null;
+    const vsClass = vs==="acima"?"vs-acima":vs==="abaixo"?"vs-abaixo":"vs-nd";
+    const vsLabel = vs==="acima"?"▲ Acima":vs==="abaixo"?"▼ Abaixo":"N/D";
+    return `<div class="media-row">
+      <span class="media-periodo">MM${p}</span>
+      <span class="media-valor">${fmtNum(val)}</span>
+      <span class="media-vs ${vsClass}">${vsLabel}</span>
+    </div>`;
+  }).join("");
+
+  return `<div class="tipo-card">
+    <div class="tipo-header">
+      ${tipo}
+      <span class="align-badge ${alinClass}">${alinLabel||"—"}</span>
+    </div>
+    ${rows}
+  </div>`;
+}
+
+function buildTF(tf, data){
+  const d = data.timeframes[tf];
+  if(!d||d.erro) return `<div class="tf-section"><div class="tf-header"><span class="tf-title">${TF_LABEL[tf]}</span><span style="color:var(--muted);font-size:12px">Sem dados disponíveis</span></div></div>`;
+
+  const c = cor(d.sinal_cor), bg = bgCor(d.sinal_cor), bd = bordCor(d.sinal_cor);
+  const cards = TIPOS.map(t=>buildTipoCard(t, d.medias, d.alinhamento, d.preco)).join("");
+
+  // alinhamento consistente entre os 4 tipos por período
+  const periodoResume = PERIODOS.map(p=>{
+    const vals = TIPOS.map(t=>d.medias[p]?.[t]).filter(v=>v!=null);
+    if(vals.length===0) return "";
+    const acima = vals.filter(v=>d.preco>v).length;
+    const pct   = Math.round(acima/vals.length*100);
+    const col   = pct>=75?"var(--green)":pct<=25?"var(--red)":"var(--amber)";
+    return `<span style="color:${col};font-weight:500">MM${p}: ${pct}% acima</span>`;
+  }).join('<span style="color:var(--border);margin:0 4px">·</span>');
+
+  return `<div class="tf-section">
+    <div class="tf-header">
+      <span class="tf-title">${TF_LABEL[tf]}</span>
+      <span class="tf-preco">${fmtNum(d.preco)} pts</span>
+      <span class="sinal-pill" style="background:${bg};color:${c};border-color:${bd}">
+        ${d.pct_comprador}% Comprador · ${d.sinal}
+      </span>
+    </div>
+    <div class="periodo-alinha"><span class="pa-label">Preço vs médias:</span>${periodoResume}</div>
+    <div class="grid-medias">${cards}</div>
+  </div>`;
+}
+
+async function init(){
+  try{
+    const r = await fetch("medias.json?t="+Date.now());
+    if(!r.ok) throw new Error("HTTP "+r.status);
+    const data = await r.json();
+    render(data);
+  }catch(e){
+    document.getElementById("loading").style.display="none";
+    const el=document.getElementById("error");
+    el.style.display="block";
+    el.innerHTML=`<b>Erro ao carregar dados</b><br><small>${e.message}</small><br><br>
+    <small style="color:var(--muted)">Execute o GitHub Actions:<br>Actions → Atualizar Médias IBOV → Run workflow</small>`;
+  }
+}
+
+function render(data){
+  document.getElementById("loading").style.display="none";
+  document.getElementById("app").style.display="block";
+  const ts = new Date(data.updated_at);
+  document.getElementById("updated").textContent =
+    ts.toLocaleString("pt-BR",{timeZone:"America/Sao_Paulo",day:"2-digit",month:"2-digit",year:"numeric",hour:"2-digit",minute:"2-digit"});
+
+  const app = document.getElementById("app");
+  app.innerHTML =
+    `<div class="resumo">${buildResumo(data)}</div>` +
+    TFS.map(tf=>buildTF(tf,data)).join("");
+}
+
+init();
+</script>
+</body>
+</html>
